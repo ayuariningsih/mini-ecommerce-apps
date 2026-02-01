@@ -1,5 +1,3 @@
-"use client";
-
 import Image from "next/image";
 import { IoMdArrowDropleft, IoMdArrowDropright } from "react-icons/io";
 import Icon from "../ui/icon";
@@ -34,6 +32,7 @@ const ProductImage = ({
         className="mb-8 max-h-90 max-w-90 bg-cover object-contain absolute inset-0 m-auto"
         src={srcImage}
         alt={altImage}
+        preload
       />
       <div className="absolute right-2 bottom-4 flex items-center justify-center font-bold gap-2">
         <Icon

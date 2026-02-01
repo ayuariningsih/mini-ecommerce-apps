@@ -6,10 +6,12 @@ import { ProductDetails } from "../components/shared/ProductDetails";
 import { useGetProducts } from "../providers/api/getProducts";
 import { Product } from "../providers/types/products";
 import { useState } from "react";
+import ErrorLayout from "../components/layouts/ErrorLayout";
+import LoadingLayout from "../components/layouts/LoadingLayout";
 
 export default function Home() {
   const defaultImage = "/placeholder-photo.webp";
-  const { data, isLoading, isError, error } = useGetProducts();
+  const { data, isLoading, isError, error, refetch } = useGetProducts();
 
   const [selectedProductIndex, setSelectedProductIndex] = useState<number>(0);
   const [productImagesIndex, setProductImagesIndex] = useState<number>(0);
@@ -38,44 +40,56 @@ export default function Home() {
     setProductImagesIndex(0);
   };
 
-  return (
-    <>
-      <div className="w-screen lg:h-screen flex justify-center items-center">
-        <div className="w-full lg:w-3/4 flex flex-col lg:flex-row justify-center shadow-lg rounded-lg p-8">
-          <div className="flex flex-col items-center lg:w-1/2">
-            <ProductImage
-              defaultImage={defaultImage}
-              srcImage={selectedProductData.images[productImagesIndex]?.url}
-              altImage="product-image"
-              productImagesIndex={productImagesIndex}
-              selectedProductData={selectedProductData}
-              onPrevImage={onPrevImagePreview}
-              onNextImage={onNextImagePreview}
-            />
-            <div className="flex gap-4 w-80 md:w-full flex-wrap items-center justify-center">
-              {data?.data.map((item, index) => (
-                <Thumbnail
-                  key={item.id}
-                  defaultImage={defaultImage}
-                  altImage="product-thumbnail"
-                  srcImage={item.images[0]?.url || defaultImage}
-                  onSelectPreview={() => onSelectImageToPreview(index)}
-                  selectedProductIndex={selectedProductIndex}
-                  productIndex={index}
-                />
-              ))}
-            </div>
-          </div>
-          <ProductDetails
-            saleLabel={selectedProductData.badge}
-            productName={selectedProductData.name}
-            rating={selectedProductData.rating}
-            price={selectedProductData.price}
-            onAddToCart={() => {}}
-            onBuyNow={() => {}}
+  const handleRetry = () => {
+    refetch();
+  };
+
+  if (isError)
+    return (
+      <ErrorLayout
+        message={error?.message ?? "Looks something went wrong."}
+        onRetry={handleRetry}
+      />
+    );
+
+  return isLoading ? (
+    <LoadingLayout />
+  ) : (
+    <div className="w-screen lg:h-screen flex justify-center items-center">
+      <div className="w-full lg:w-3/4 flex flex-col lg:flex-row justify-center shadow-lg rounded-lg p-8">
+        <div className="flex flex-col items-center lg:w-1/2">
+          <ProductImage
+            defaultImage={defaultImage}
+            srcImage={selectedProductData.images[productImagesIndex]?.url}
+            altImage="product-image"
+            productImagesIndex={productImagesIndex}
+            selectedProductData={selectedProductData}
+            onPrevImage={onPrevImagePreview}
+            onNextImage={onNextImagePreview}
           />
+          <div className="flex gap-4 w-80 md:w-full flex-wrap items-center justify-center">
+            {data?.data.map((item, index) => (
+              <Thumbnail
+                key={item.id}
+                defaultImage={defaultImage}
+                altImage="product-thumbnail"
+                srcImage={item.images[0]?.url || defaultImage}
+                onSelectPreview={() => onSelectImageToPreview(index)}
+                selectedProductIndex={selectedProductIndex}
+                productIndex={index}
+              />
+            ))}
+          </div>
         </div>
+        <ProductDetails
+          saleLabel={selectedProductData.badge}
+          productName={selectedProductData.name}
+          rating={selectedProductData.rating}
+          price={selectedProductData.price}
+          onAddToCart={() => {}}
+          onBuyNow={() => {}}
+        />
       </div>
-    </>
+    </div>
   );
 }

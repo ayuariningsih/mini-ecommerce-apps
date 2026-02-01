@@ -1,5 +1,3 @@
-"use client";
-
 import dynamic from "next/dynamic";
 import { MdAddShoppingCart } from "react-icons/md";
 import { Button } from "../ui/button";
