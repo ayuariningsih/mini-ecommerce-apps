@@ -29,10 +29,11 @@ const ProductImage = ({
           e.currentTarget.src = defaultImage;
         }}
         fill
-        className="mb-8 max-h-90 max-w-90 bg-cover object-contain absolute inset-0 m-auto"
+        className="max-h-fit absolute inset-0 m-auto"
         src={srcImage}
         alt={altImage}
         preload
+        objectFit="cover"
       />
       <div className="absolute right-2 bottom-4 flex items-center justify-center font-bold gap-2">
         <Icon
