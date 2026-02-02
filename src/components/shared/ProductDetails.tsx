@@ -22,8 +22,8 @@ export const ProductDetails = ({
   onBuyNow,
 }: ProductDetailsProps) => {
   return (
-    <div className="lg:w-1/2 flex flex-col gap-3 p-2 lg:p-8">
-      <p className="font-extrabold text-lg text-red-500 tracking-tighter">
+    <div className="lg:w-1/2 flex flex-col gap-2 p-2 lg:p-8">
+      <p className="font-extrabold text-red-500 tracking-tighter">
         {saleLabel}
       </p>
       <p className="font-bold text-2xl">{productName}</p>
