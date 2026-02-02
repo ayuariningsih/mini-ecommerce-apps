@@ -25,8 +25,10 @@ export default function Home() {
     rating: 0,
   };
 
+  const productData = data?.data ?? [];
+
   const selectedProductData: Product =
-    data?.data?.[selectedProductIndex] || defaultProduct;
+    productData?.[selectedProductIndex] ?? defaultProduct;
 
   const onPrevImagePreview = () => {
     if (productImagesIndex > 0) setProductImagesIndex(productImagesIndex - 1);
@@ -56,8 +58,8 @@ export default function Home() {
     <LoadingLayout />
   ) : (
     <div className="w-screen lg:h-screen flex justify-center items-center">
-      <div className="w-full lg:w-3/4 flex flex-col lg:flex-row justify-center shadow-lg rounded-lg p-8">
-        <div className="flex flex-col items-center lg:w-1/2">
+      <div className="w-full lg:w-3/4 flex flex-col gap-4 lg:flex-row justify-center shadow-lg rounded-lg p-8">
+        <div className="flex flex-col items-center gap-2 lg:w-1/2">
           <ProductImage
             defaultImage={defaultImage}
             srcImage={selectedProductData.images[productImagesIndex]?.url}
@@ -67,13 +69,13 @@ export default function Home() {
             onPrevImage={onPrevImagePreview}
             onNextImage={onNextImagePreview}
           />
-          <div className="flex gap-4 w-80 md:w-full flex-wrap items-center justify-center">
+          <div className="flex gap-4 w-80 md:w-full flex-wrap items-center">
             {data?.data.map((item, index) => (
               <Thumbnail
                 key={item.id}
                 defaultImage={defaultImage}
                 altImage="product-thumbnail"
-                srcImage={item.images[0]?.url || defaultImage}
+                srcImage={item.images[0]?.url ?? defaultImage}
                 onSelectPreview={() => onSelectImageToPreview(index)}
                 selectedProductIndex={selectedProductIndex}
                 productIndex={index}
